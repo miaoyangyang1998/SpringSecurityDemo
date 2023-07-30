@@ -2,6 +2,7 @@ package com.ustc.springsecuritydemo.config;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -16,6 +17,7 @@ import org.springframework.security.web.SecurityFilterChain;
  * @date :2023-07-30 21:53:00
  */
 @Configuration
+@EnableMethodSecurity // 开启方法级别的精确权限控制
 public class AppSecurityConfiguration {
 
     @Bean
@@ -42,7 +44,8 @@ public class AppSecurityConfiguration {
         // 模拟内存中保存所有用户信息，此处也可以查询数据库
         UserDetails user01 = User.withUsername("miaoyangyang01").password(passwordEncoder.encode("112233")).roles("admin").build();
         UserDetails user02 = User.withUsername("miaoyangyang02").password(passwordEncoder.encode("112233")).roles("manager").build();
-        UserDetails user03 = User.withUsername("miaoyangyang03").password(passwordEncoder.encode("112233")).roles("HR").build();
+        // 有world方法执行权限
+        UserDetails user03 = User.withUsername("miaoyangyang03").password(passwordEncoder.encode("112233")).authorities("world_exec").roles("HR").build();
         return new InMemoryUserDetailsManager(user01, user02, user03);
     }
 
